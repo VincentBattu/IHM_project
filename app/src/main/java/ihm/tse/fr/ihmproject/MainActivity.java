@@ -1,9 +1,11 @@
 package ihm.tse.fr.ihmproject;
 
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -19,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
     private CountDownTimer countDownTimer;
 
+    private int vitesse;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,21 +33,33 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        cookie = (TextView) findViewById(R.id.test);
+        cookie = (TextView) findViewById(R.id.cookie1);
         initPoscookie();
 
-       countDownTimer = new CountDownTimer(Long.MAX_VALUE, 25) {
+        /*ObjectAnimator anim = new ObjectAnimator();
+        anim.setDuration(60000);
+        anim.setTarget(cookie.getLayoutParams());
+        anim.setPropertyName("topMargin");
+        anim.setupStartValues();
+        anim.setupEndValues();*/
 
+       countDownTimer = new CountDownTimer(Long.MAX_VALUE, 500) {
+
+           int nb=1;
             @Override
             public void onTick(long millisUntilFinished) {
-                //mooveCookie();
+                if(!goDownCookie(nb)){
+                    nb++;
+                }
+
             }
 
             @Override
             public void onFinish() {
                 countDownTimer.start();
             }
-        }.start();
+        };
+       countDownTimer.start();
 
         cookie.setOnClickListener(new View.OnClickListener() {
 
@@ -56,24 +72,30 @@ public class MainActivity extends AppCompatActivity {
                 TextView textView = parent.findViewById(R.id.counter);
                 Integer counter = Integer.parseInt(textView.getText().toString()) + 1;
                 textView.setText(counter.toString());
-                mooveCookie();
+                //mooveCookie();
             }
         });
 
     }
 
-    private void mooveCookie(){
+    private boolean goDownCookie(int nb){
 
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) cookie.getLayoutParams();
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        params.leftMargin = cookie.getWidth() + new Random().nextInt(metrics.widthPixels - 2*cookie.getWidth());
-        params.rightMargin = cookie.getWidth() + new Random().nextInt(metrics.widthPixels - 2*cookie.getWidth());
-        params.topMargin = cookie.getHeight() + new Random().nextInt(metrics.heightPixels - 3*cookie.getHeight());
-        params.bottomMargin = cookie.getHeight() + new Random().nextInt(metrics.heightPixels - 3*cookie.getHeight());
-        cookie.setLayoutParams(params);
+        //params.topMargin = cookie.getHeight() + new Random().nextInt(metrics.heightPixels - 3*cookie.getHeight());
+       //params.bottomMargin = cookie.getHeight() + new Random().nextInt(metrics.heightPixels - 3*cookie.getHeight());
 
+        vitesse = metrics.heightPixels / 125;
+
+        if(nb * vitesse >= metrics.heightPixels){
+            return true;
+        }
+        params.topMargin = metrics.heightPixels - nb * vitesse;
+        //params.bottomMargin = metrics.heightPixels - cookie.getHeight() - nb * vitesse;
+        cookie.setLayoutParams(params);
+        return false;
     }
 
     private void initPoscookie(){
@@ -82,8 +104,10 @@ public class MainActivity extends AppCompatActivity {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        params.leftMargin = cookie.getWidth() + new Random().nextInt(metrics.widthPixels - 2*cookie.getWidth());
-        params.bottomMargin = metrics.heightPixels - 2 * cookie.getHeight();
+        //params.leftMargin = cookie.getWidth() + new Random().nextInt(metrics.widthPixels - 2*cookie.getWidth());
+        params.leftMargin = (metrics.widthPixels/4) - 1 * cookie.getWidth();
+        params.bottomMargin = metrics.heightPixels - 3 * cookie.getHeight();
+        params.topMargin = 3 * cookie.getHeight();
         cookie.setLayoutParams(params);
 
     }

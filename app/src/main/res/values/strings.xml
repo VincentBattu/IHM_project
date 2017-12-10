@@ -2,4 +2,5 @@
     <string name="app_name">IHM project</string>
     <string name="text">Cookie</string>
     <string name="counter">0</string>
+    <string name="life">Life : 3</string>
 </resources>
