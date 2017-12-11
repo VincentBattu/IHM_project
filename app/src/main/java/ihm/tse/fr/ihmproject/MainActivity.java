@@ -17,11 +17,17 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
 
-    private TextView cookie;
+    private TextView cookieLeft;
+    private TextView cookieMiddle;
+    private TextView cookieRight;
 
     private CountDownTimer countDownTimer;
 
-    private int vitesse;
+    private DisplayMetrics metrics = new DisplayMetrics();
+
+    private int vitesseLente;
+    private int vitesseMoyenne;
+    private int vitesseRapide;
 
 
     @Override
@@ -33,27 +39,33 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        cookie = (TextView) findViewById(R.id.cookie1);
-        initPoscookie();
+
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        vitesseLente = metrics.heightPixels / 125;
+        vitesseMoyenne = metrics.heightPixels / 60;
+        vitesseRapide = metrics.heightPixels / 30;
+
+        cookieLeft = (TextView) findViewById(R.id.cookie1);
+        cookieMiddle = (TextView) findViewById(R.id.cookie2);
+        cookieRight = (TextView) findViewById(R.id.cookie3);
 
         TextView life = (TextView) findViewById(R.id.life);
         String title = getString(R.string.life).concat(" ").concat(getString(R.string.nbLife));
         life.setText(title);
 
-        /*ObjectAnimator anim = new ObjectAnimator();
-        anim.setDuration(60000);
-        anim.setTarget(cookie.getLayoutParams());
-        anim.setPropertyName("topMargin");
-        anim.setupStartValues();
-        anim.setupEndValues();*/
+        countDownTimer = new CountDownTimer(Long.MAX_VALUE, 500) {
 
-       countDownTimer = new CountDownTimer(Long.MAX_VALUE, 500) {
+            int nb = 1;
 
-           int nb=1;
             @Override
             public void onTick(long millisUntilFinished) {
-                if(!goDownCookie(nb)){
+                if (!goDownCookie(cookieLeft, nb)) {
                     nb++;
+                } else {
+                    TextView life = (TextView) findViewById(R.id.life);
+                    Integer nbLife = Integer.parseInt(getString(R.string.nbLife)) - 1;
+                    String title = getString(R.string.life).concat(" ").concat(nbLife.toString());
+                    life.setText(title);
                 }
 
             }
@@ -63,56 +75,33 @@ public class MainActivity extends AppCompatActivity {
                 countDownTimer.start();
             }
         };
-       countDownTimer.start();
+        countDownTimer.start();
 
-        cookie.setOnClickListener(new View.OnClickListener() {
+        cookieLeft.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                View parent = (View)v.getParent();
-                if (parent == null){
+                View parent = (View) v.getParent();
+                if (parent == null) {
                     return;
                 }
-                TextView textView = ((View)parent.getParent()).findViewById(R.id.counter);
+                TextView textView = ((View) parent.getParent()).findViewById(R.id.counter);
                 Integer counter = Integer.parseInt(textView.getText().toString()) + 1;
                 textView.setText(counter.toString());
-                //mooveCookie();
             }
         });
 
     }
 
-    private boolean goDownCookie(int nb){
+    private boolean goDownCookie(TextView cookie, int nb) {
 
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) cookie.getLayoutParams();
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        //params.topMargin = cookie.getHeight() + new Random().nextInt(metrics.heightPixels - 3*cookie.getHeight());
-       //params.bottomMargin = cookie.getHeight() + new Random().nextInt(metrics.heightPixels - 3*cookie.getHeight());
-
-        vitesse = metrics.heightPixels / 125;
-
-        if(nb * vitesse >= metrics.heightPixels){
+        if (nb * vitesseLente >= metrics.heightPixels) {
             return true;
         }
-        params.topMargin = metrics.heightPixels - nb * vitesse;
-        //params.bottomMargin = metrics.heightPixels - cookie.getHeight() - nb * vitesse;
+        params.topMargin = nb * vitesseLente;
         cookie.setLayoutParams(params);
         return false;
-    }
-
-    private void initPoscookie(){
-
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) cookie.getLayoutParams();
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-        //params.leftMargin = cookie.getWidth() + new Random().nextInt(metrics.widthPixels - 2*cookie.getWidth());
-        params.leftMargin = (metrics.widthPixels/4) - 1 * cookie.getWidth();
-        params.bottomMargin = metrics.heightPixels - 3 * cookie.getHeight();
-        params.topMargin = 3 * cookie.getHeight();
-        cookie.setLayoutParams(params);
-
     }
 }
