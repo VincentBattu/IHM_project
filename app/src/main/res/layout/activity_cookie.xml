@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ihm.tse.fr.ihmproject.MainActivity">
+    tools:context="ihm.tse.fr.ihmproject.CookieActivity">
 
     <TextView
         android:id="@+id/counter"

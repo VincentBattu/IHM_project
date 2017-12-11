@@ -4,4 +4,6 @@
     <string name="counter">0</string>
     <string name="life">Life : </string>
     <string name="nbLife">3</string>
+    <string name="textInButton">Play</string>
+    <string name="displayTop10">Top 10 scores</string>
 </resources>
