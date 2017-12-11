@@ -24,7 +24,6 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="15dp"
         android:gravity="center"
-        android:text="@string/life"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -36,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
         cookie = (TextView) findViewById(R.id.cookie1);
         initPoscookie();
 
+        TextView life = (TextView) findViewById(R.id.life);
+        String title = getString(R.string.life).concat(" ").concat(getString(R.string.nbLife));
+        life.setText(title);
+
         /*ObjectAnimator anim = new ObjectAnimator();
         anim.setDuration(60000);
         anim.setTarget(cookie.getLayoutParams());
@@ -69,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 if (parent == null){
                     return;
                 }
-                TextView textView = parent.findViewById(R.id.counter);
+                TextView textView = ((View)parent.getParent()).findViewById(R.id.counter);
                 Integer counter = Integer.parseInt(textView.getText().toString()) + 1;
                 textView.setText(counter.toString());
                 //mooveCookie();
