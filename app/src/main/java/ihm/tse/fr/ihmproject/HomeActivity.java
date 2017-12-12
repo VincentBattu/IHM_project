@@ -1,5 +1,6 @@
 package ihm.tse.fr.ihmproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -22,7 +23,7 @@ public class HomeActivity extends AppCompatActivity {
 
         play.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Code here executes on main thread after user presses button
+                startActivity(new Intent(HomeActivity.this, CookieActivity.class));
             }
         });
     }
