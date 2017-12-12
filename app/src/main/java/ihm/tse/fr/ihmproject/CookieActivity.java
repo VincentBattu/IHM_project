@@ -11,20 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class CookieActivity extends AppCompatActivity {
 
 
-    private List<TextView> cookies = new ArrayList<>();
+    private List<ImageView> cookies = new ArrayList<>();
 
     private CountDownTimer appearCookie;
 
@@ -56,11 +55,11 @@ public class CookieActivity extends AppCompatActivity {
 
         vitesse = metrics.heightPixels / 20;
 
-        life = (TextView) findViewById(R.id.life);
+        life = findViewById(R.id.life);
         String title = getString(R.string.life).concat(" ").concat(getString(R.string.nbLife));
         life.setText(title);
 
-        layout = (RelativeLayout) findViewById(R.id.layoutCookie);
+        layout = findViewById(R.id.layoutCookie);
 
 
         appearCookie = new CountDownTimer(Long.MAX_VALUE, 2000) {
@@ -69,8 +68,8 @@ public class CookieActivity extends AppCompatActivity {
 
             @Override
             public void onTick(long millisUntilFinished) {
-                final TextView cookie = new TextView(getApplicationContext());
-                cookie.setText("cookie");
+                final ImageView cookie = new ImageView(getApplicationContext());
+                cookie.setImageResource(R.drawable.image_cookie);
                 layout.addView(cookie);
                 cookies.add(cookie);
 
@@ -111,9 +110,9 @@ public class CookieActivity extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
 
-                Iterator<TextView> i = cookies.iterator();
+                Iterator<ImageView> i = cookies.iterator();
                 while (i.hasNext()){
-                    TextView cookie = i.next();
+                    ImageView cookie = i.next();
                     float y = cookie.getY();
                     cookie.setY(y + vitesse);
 
@@ -143,7 +142,7 @@ public class CookieActivity extends AppCompatActivity {
     }
 
 
-    private void initPos(TextView cookie) {
+    private void initPos(ImageView cookie) {
 
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) cookie.getLayoutParams();
 
