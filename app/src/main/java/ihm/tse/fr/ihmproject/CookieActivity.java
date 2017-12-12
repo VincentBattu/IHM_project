@@ -1,5 +1,6 @@
 package ihm.tse.fr.ihmproject;
 
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -38,6 +39,8 @@ public class CookieActivity extends AppCompatActivity {
     private Integer nbLife = 3;
 
     private int vitesse;
+
+    private int counter = 0;
 
 
     @Override
@@ -79,6 +82,7 @@ public class CookieActivity extends AppCompatActivity {
                         if (parent == null) {
                             return;
                         }
+                        counter++;
                         TextView textView = ((View) parent.getParent()).findViewById(R.id.counter);
                         Integer counter = Integer.parseInt(textView.getText().toString()) + 1;
                         textView.setText(counter.toString());
@@ -119,9 +123,10 @@ public class CookieActivity extends AppCompatActivity {
                         String title = getString(R.string.life).concat(" ").concat(nbLife.toString());
                         life.setText(title);
                         if (nbLife <= 0) {
-                            System.out.println("Perdu");
                             appearCookie.cancel();
                             countDownTimer.cancel();
+                            BestScore.scores.add(counter);
+                            startActivity(new Intent(CookieActivity.this, GameOverActivity.class));
                         }
 
                     }
@@ -133,22 +138,6 @@ public class CookieActivity extends AppCompatActivity {
                 countDownTimer.start();
             }
         }.start();
-
-//
-//        cookieLeft.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                View parent = (View) v.getParent();
-//                if (parent == null) {
-//                    return;
-//                }
-//                TextView textView = ((View) parent.getParent()).findViewById(R.id.counter);
-//                Integer counter = Integer.parseInt(textView.getText().toString()) + 1;
-//                textView.setText(counter.toString());
-//                v.setVisibility(View.GONE);
-//            }
-//        });
 
 
     }

@@ -26,5 +26,11 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, CookieActivity.class));
             }
         });
+
+        top10.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, Top10Activity.class));
+            }
+        });
     }
 }
