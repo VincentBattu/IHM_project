@@ -1,5 +1,7 @@
 package ihm.tse.fr.ihmproject;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -37,7 +39,7 @@ public class CookieActivity extends AppCompatActivity {
 
     private Integer nbLife = 3;
 
-    private int vitesse;
+    private int speed;
 
     private int counter = 0;
 
@@ -51,9 +53,29 @@ public class CookieActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_cookie);
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                if (!isFinishing()){
+                    new AlertDialog.Builder(CookieActivity.this)
+                            .setTitle(R.string.titleDialog)
+                            .setMessage(R.string.textDialog)
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.ready, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                    appearCookie.start();
+                                }
+                            }).show();
+                }
+            }
+        });
+
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        vitesse = metrics.heightPixels / 20;
+        speed = metrics.heightPixels / 20;
 
         life = findViewById(R.id.life);
         String title = getString(R.string.life).concat(" ").concat(getString(R.string.nbLife));
@@ -70,6 +92,10 @@ public class CookieActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 final ImageView cookie = new ImageView(getApplicationContext());
                 cookie.setImageResource(R.drawable.image_cookie);
+                /*cookie.setMinimumHeight(32);
+                cookie.setMinimumWidth(32);*/
+                cookie.setMaxHeight(32);
+                cookie.setMaxWidth(32);
                 layout.addView(cookie);
                 cookies.add(cookie);
 
@@ -93,7 +119,7 @@ public class CookieActivity extends AppCompatActivity {
                 initPos(cookie);
 
                 if (nb == 10) {
-                    vitesse *= 1.3;
+                    speed *= 1.3;
                     nb = 0;
                 } else {
                     nb++;
@@ -103,7 +129,7 @@ public class CookieActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
             }
-        }.start();
+        };
 
         countDownTimer = new CountDownTimer(Long.MAX_VALUE, 500) {
 
@@ -114,7 +140,7 @@ public class CookieActivity extends AppCompatActivity {
                 while (i.hasNext()){
                     ImageView cookie = i.next();
                     float y = cookie.getY();
-                    cookie.setY(y + vitesse);
+                    cookie.setY(y + speed);
 
                     if (cookie.getY() >= metrics.heightPixels) {
                         nbLife--;
